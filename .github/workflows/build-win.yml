@@ -12,6 +12,8 @@ on:
 
 env:
   BUILD_TYPE: Release
+  BUILD_PLATFORM: x64
+  VERSION: 1.1.0
 
 jobs:
   build:
@@ -38,3 +40,24 @@ jobs:
     - name: Test
       working-directory: .\playground
       run: ctest --test-dir build ${{ github.event.inputs.ctestArgs }}
+    
+    - name: release
+      uses: actions/create-release@v1
+      id: create_release
+      with:
+        draft: false
+        prerelease: false
+        release_name: ${{env.VERSION}}
+        tag_name: ${{env.VERSION}}
+        #body_path: CHANGELOG.md
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: Upload
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{env.BUILD_CONFIGURATION}}/podofo-unit.lib
+          asset_name: podofo-unit.lib
