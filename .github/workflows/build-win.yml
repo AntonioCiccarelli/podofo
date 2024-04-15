@@ -13,7 +13,7 @@ on:
 env:
   BUILD_TYPE: Release
   BUILD_PLATFORM: x64
-  VERSION: 1.1.0
+  VERSION: 1.1.01
 
 jobs:
   build:
